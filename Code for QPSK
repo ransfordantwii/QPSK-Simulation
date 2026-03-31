@@ -1,9 +1,8 @@
 %% Author and his affiliation
-% This program is implemented by Le Thanh Tan
-% Ph.D Student
-% Institut National de la Recherche Scientifique (INRS)
-% University of Quebec, Montreal, QC, H5A 1K6, Canada
-% Email: lethanh@emt.inrs.ca
+% This program is implemented by Ransford Antwi
+% Undergraduate Student
+% Hampton University
+% 
 %%
 clc;
 clear all;
