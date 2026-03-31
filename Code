@@ -1,0 +1,44 @@
+%% Author and his affiliation
+% This program is implemented by Le Thanh Tan
+% Ph.D Student
+% Institut National de la Recherche Scientifique (INRS)
+% University of Quebec, Montreal, QC, H5A 1K6, Canada
+% Email: lethanh@emt.inrs.ca
+%%
+clc;
+clear all;
+close all;
+pause(0.05)
+N_all = [517*10^3*ones(1,6) 517*10^3*ones(1,5)];% we can change N
+Eb_N0_dB = [0:2:20]; % multiple Eb/N0 values
+for ii = 1:length(Eb_N0_dB)
+    ii
+    N = N_all(ii);
+s_data = (1/sqrt(2))*rand(1,N)>0.5;
+%% Modulation
+ip = qpsk(s_data);
+s = ip; % normalization of energy to 1
+Noise1 = 1/sqrt(2)*[randn(1,N/2) + j*randn(1,N/2)]; % white guassian noise, 0dB variance
+%% Add noise
+y = s + 10^(-Eb_N0_dB(ii)/20)*Noise1; % additive white gaussian noise
+%% Demodulation
+shat = detect_qpsk(y);
+nErr(ii) = size(find([s_data- shat]),2); % couting the number of errors
+a=find([s_data- shat]);
+end
+
+simBer_QPSK = nErr./N_all;
+theoryBer_QPSK = 0.5*erfc(sqrt((10.^(Eb_N0_dB/10)))) ;
+
+close all
+figure
+semilogy(Eb_N0_dB,theoryBer_QPSK,'b.-');
+hold on
+semilogy(Eb_N0_dB,simBer_QPSK,'mx-');
+axis([0 20 10^-7 1])
+grid on
+legend('theory-QPSK', 'simulation-QPSK');
+xlabel('Es/No, dB')
+ylabel('Bit Error Rate')
+title('Bit error probability curve for QPSK Ransford Antwi, 00558567')
+save Quesa_data simBer_QPSK theoryBer_QPSK Eb_N0_dB
